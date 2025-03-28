@@ -1,1 +1,23 @@
-name: Auto Obfuscate BPB  on:   push:     branches: [main]   schedule:     - cron: '0 1 * * *'  jobs:   build:     runs-on: ubuntu-latest     steps:       - uses: actions/checkout@v4        - name: Setup Node.js         uses: actions/setup-node@v4         with:           node-version: '20'        - name: Obfuscate Worker         run: |           wget -qO origin.js https://example.com/work.js  # 替换实际URL           npx javascript-obfuscator origin.js --output _worker.js \             --compact --rename-globals \             --string-array --unicode-escape-sequence        - uses: stefanzweifel/git-auto-commit-action@v5         with:           commit_message: '🔧 Auto-update obfuscated worker'           branch: main
+name: BPB Auto Obfuscation
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 1 * * *'
+
+jobs:
+  obfuscate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Download
